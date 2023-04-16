@@ -37,39 +37,36 @@ const ProductCreate = ({ addProduct, user }) => {
     }
     return (
         <React.Fragment>
-            {user.isAuthenticated ? (
-            <h3>Создание нового товара</h3>
-            ) : (
-                ""
-            )}
+            {user.userRole == "admin" ? (
+                <>
+                    <h3>Создание нового товара</h3>
+                    <form onSubmit={handleSubmit}>
+                        <input type="text" name="nameOfProduct" placeholder="Имя товара:" /><br />
 
-            {user.isAuthenticated ? (
-            <form onSubmit={handleSubmit}>
-                <input type="text" name="nameOfProduct" placeholder="Имя товара:" /><br />
+                        <label>Укажите категорию товара:</label>
+                        <select name="category">
+                            {categoriesList.map(({ id, name }) => (
+                                <option key={id} value={id}>{name}</option>
+                            ))}
+                        </select><br />
 
-                <label>Укажите категорию товара:</label>
-                <select name="category">
-                    {categoriesList.map(({ id, name }) => (
-                        <option key={id} value={id}>{name}</option>
-                    ))}
-                </select><br />
+                        <label>Укажите производителя:</label> 
+                        <select name="manufacturer">
+                            {manufacturersList.map(({ id, name }) => (
+                                <option key={id} value={id}>{name}</option>
+                            ))}
+                        </select><br />
 
-                <label>Укажите производителя:</label> 
-                <select name="manufacturer">
-                    {manufacturersList.map(({ id, name }) => (
-                        <option key={id} value={id}>{name}</option>
-                    ))}
-                </select><br />
+                        <input type="number" step="1" min="1" name="price" placeholder="Цена:" /><br />
 
-                <input type="number" step="1" min="1" name="price" placeholder="Цена:" /><br />
+                        <input type="text" name="image" placeholder="Ссылка на изображение:" /><br />
 
-                <input type="text" name="image" placeholder="Ссылка на изображение:" /><br />
-
-                <button type="submit">Создать</button>
-            </form>
+                        <button type="submit">Создать</button>
+                    </form>
+                </>
                 ) : (
                     ""
-                )}
+            )}
         </React.Fragment >
     )
 }

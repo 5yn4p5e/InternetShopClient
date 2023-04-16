@@ -58,7 +58,7 @@ const ProductDTO = ({ products, setProducts, removeProduct, user }) => {
                         {categoryName},
                         {manufacturerName},
                         {price}
-                        {user.isAuthenticated ? (
+                        {user.userRole == "admin" ? (
                             <button onClick={() => deleteItem({
                                 id
                             })}>Удалить</button>
