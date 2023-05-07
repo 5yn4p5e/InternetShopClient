@@ -1,9 +1,16 @@
 ﻿import React, { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Button, Form, Input } from 'antd';
+import "./Style.css"
+const onFinish = (values) => {
+    console.log('Success:', values);
+};
+const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+};
+
 const Register = ({ user, setUser }) => {
     const [errorMessages, setErrorMessages] = useState([])
-    const navigate = useNavigate()
-    const Register = async (event) => {
+    const register = async (event) => {
         event.preventDefault()
         var { email, password, passwordConfirm } = document.forms[0]
         // console.log(email.value, password.value)
@@ -20,9 +27,11 @@ const Register = ({ user, setUser }) => {
         }
         return await fetch("api/account/register", requestOptions)
             .then((response) => {
-                // console.log(response.status)
-                response.status === 200 &&
-                    setUser({ isAuthenticated: true, userName: "" })
+                if (response.status === 200)
+                {
+                    setUser({ isAuthenticated: true, userName: "" });
+                    window.location.assign("/");
+                }                    
                 return response.json()
             })
             .then(
@@ -30,8 +39,8 @@ const Register = ({ user, setUser }) => {
                     console.log("Data:", data)
                     if (typeof data !== "undefined" &&
                         typeof data.userName !== "undefined") {
-                        setUser({ isAuthenticated: true, userName: data.userName })
-                        navigate("/")
+                        setUser({ isAuthenticated: true, userName: data.userName });
+                        window.location.assign("/");
                     }
                     typeof data !== "undefined" && typeof data.error !== "undefined" && setErrorMessages(data.error)
                 },
@@ -47,19 +56,71 @@ const Register = ({ user, setUser }) => {
                 <h3>Пользователь {user.userName} зарегистрирован в системе</h3>
             ) : (
                 <>
-                    <h3>Регистрация</h3>
-                    <form onSubmit={Register}>
-                        <label>Ваша электронная почта </label>
-                        <input type="text" name="email" placeholder="Логин" />
-                        <br />
-                        <label>Введите пароль </label>
-                        <input type="text" name="password" placeholder="Пароль" />
-                        <br />
-                        <label>Подтвердите пароль </label>
-                        <input type="text" name="passwordConfirm" placeholder="Повторите пароль" />
-                        <br />
-                        <button type="submit">Зарегистрироваться</button>
-                    </form>
+                    <Form
+                        name="basic"
+                        labelCol={{
+                            span: 8,
+                        }}
+                        wrapperCol={{
+                            span: 16,
+                        }}
+                        style={{
+                            maxWidth: 600,
+                        }}
+                        initialValues={{
+                            remember: true,
+                        }}
+                        onFinish={onFinish}
+                        onFinishFailed={onFinishFailed}
+                        autoComplete="off"
+                    >
+                        <Form.Item
+                            label="Ваша электронная почта"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Пожалуйста, введите свою почту!',
+                                },
+                            ]}
+                        >
+                            <Input name="email" />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Пароль"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Пожалуйста, введите пароль!',
+                                },
+                            ]}
+                        >
+                            <Input.Password name="password" />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Повторите пароль"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Пожалуйста, введите пароль!',
+                                },
+                            ]}
+                        >
+                            <Input.Password name="passwordConfirm" />
+                        </Form.Item>
+
+                        <Form.Item
+                            wrapperCol={{
+                                offset: 8,
+                                span: 16,
+                            }}
+                        >
+                            <Button className="btn" onClick={register} type="primary" htmlType="submit">
+                                Зарегистрироваться
+                            </Button>
+                        </Form.Item>
+                    </Form>
                     {renderErrorMessage()}
                 </>
             )}

@@ -6,7 +6,12 @@
     padding: 10px;
 }
 
-img {
-    width: 29%;
-    height: 29%;
+.card {
+    width: 20%;
+    margin: 20px;
+    border-width: 5px;
+}
+
+.icon {
+    font-size: 200% !important;
 }

@@ -1,5 +1,9 @@
 ﻿import React, { useEffect } from "react"
+import { Breadcrumb, Layout as LayoutAntd, Menu, theme } from 'antd';
+import { EditOutlined, EllipsisOutlined, SettingOutlined, ShoppingCartOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Avatar, Card } from 'antd';
 import "./Style.css"
+const { Meta } = Card;
 const ProductDTO = ({ products, setProducts, removeProduct, user }) => {
     useEffect(() => {
         const getProducts = async () => {
@@ -37,9 +41,33 @@ const ProductDTO = ({ products, setProducts, removeProduct, user }) => {
             }, (error) => console.log(error))
     }
 
+    let actionsItems;
+    if (user.userRole == "admin") {
+        actionsItems = [
+            <EditOutlined className="icon" />,
+            <DeleteOutlined className="icon" />,
+        ];
+    }
+    else {
+        actionsItems = [
+            <ShoppingCartOutlined className="icon" />,
+        ];
+    }
+
     return (
         <React.Fragment>
             <h3>Список товаров</h3>
+            <Breadcrumb
+                style={{
+                    margin: '16px 0',
+                }}
+            >
+                <Breadcrumb.Item>Главная</Breadcrumb.Item>
+                <Breadcrumb.Item>Регистрация</Breadcrumb.Item>
+                <Breadcrumb.Item>Товары</Breadcrumb.Item>
+                <Breadcrumb.Item>Вход</Breadcrumb.Item>
+                <Breadcrumb.Item>Выход</Breadcrumb.Item>
+            </Breadcrumb>
             {products.map(
                 (
                     {
@@ -51,22 +79,37 @@ const ProductDTO = ({ products, setProducts, removeProduct, user }) => {
                         image
                     }
                 ) => (
-                <div className="Product" key={id} id={id}>
-                    <strong > {id}:
-                        <img src={image}></img>,
-                        {name},
-                        {categoryName},
-                        {manufacturerName},
-                        {price}
-                        {user.userRole == "admin" ? (
-                            <button onClick={() => deleteItem({
-                                id
-                            })}>Удалить</button>
-                        ) : (
-                            ""
-                        )}
-                    </strong>
-                </div>
+                <Card
+                    className="card"
+                    cover={
+                        <img
+                            alt="Изображения нет"
+                            src={image}
+                        />
+                    }
+                    actions={actionsItems}
+                >
+                    <Meta title={categoryName} />
+                    <Meta title={name} />
+                    <Meta title={manufacturerName} />
+                    <Meta title={price} />
+                </Card>
+                //<div className="Product" key={id} id={id}>
+                //    <strong > {id}:
+                //        <img src={image}></img>,
+                //        {name},
+                //        {categoryName},
+                //        {manufacturerName},
+                //        {price}
+                //        {user.userRole == "admin" ? (
+                //            <button onClick={() => deleteItem({
+                //                id
+                //            })}>Удалить</button>
+                //        ) : (
+                //            ""
+                //        )}
+                //    </strong>
+                //</div>
                 ))}
         </React.Fragment>
     )

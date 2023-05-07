@@ -1,54 +1,127 @@
 ﻿import React from "react"
 import { Outlet, Link } from "react-router-dom"
 import "./Style.css"
-import { Breadcrumb, Layout as LayoutAntd, Menu, theme } from 'antd';
-const { Header, Content, Footer } = LayoutAntd;
-const Layout = ({ user }) => {
-    const {
-        token: { colorBgContainer },
-    } = theme.useToken();
-    return (
-        <LayoutAntd className="layout">
-            <Header>
-                <div
-                    style={{
-                        float: "right",
-                        color: "rgba(255, 255, 255, 0.65)",
-                    }}
-                >
-                    {user.isAuthenticated ? (
-                        <strong>{user.userName}</strong>
-                    ) : (
-                        <strong>Гость</strong>
-                    )}
-                </div>
+import { Layout as LayoutAntd, Menu, theme, Avatar, Dropdown, Button, Modal } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
+import { useState } from 'react';
 
+const { Header, Content, Footer } = LayoutAntd;
+const Layout = ({ user, setUser }) => {
+    let dropdownItems;
+    let layoutItems;
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const logoff = async (event) => {
+        setIsModalOpen(false);
+        event.preventDefault()
+
+        const requestOptions = {
+            method: "POST",
+        }
+        return await fetch("api/account/logoff", requestOptions)
+            .then((response) => {
+                if (response.status === 200) {
+                    setUser({ isAuthenticated: false, userName: "" });
+                }
+                window.location.assign("/");
+            })
+    }
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
+    if (user.isAuthenticated) {
+        dropdownItems = [
+            {
+                label: <Link onClick={showModal}>Выход</Link>,
+                key: '1',
+            },
+        ];
+    }
+    else {
+        dropdownItems = [
+            {
+                label: <a href="/login">Войти в систему</a>,
+                key: '1',
+            },
+            {
+                type: 'divider',
+            },
+            {
+                label: <a href="/register">Зарегистрироваться</a>,
+                key: '2',
+            },
+        ];
+    }
+
+    if (user.userRole == "admin") {
+        layoutItems = [
+            {
+                label: <Link to="/">Главная</Link>,
+                key: "1",
+            },
+            {
+                label: <Link to="/products">Товары</Link>,
+                key: "2",
+            },
+            {
+                label: <Link to="/productCreate">Добавление товара</Link>,
+                key: "3",
+            },
+        ];
+    }
+    else {
+        layoutItems = [
+            {
+                label: <Link to="/">Главная</Link>,
+                key: "1",
+            },
+            {
+                label: <Link to="/products">Товары</Link>,
+                key: "2",
+            },
+        ];
+    }
+    return (
+        <>
+            <LayoutAntd className="layout" >
+                <Header className="header">
+                    <div
+                        style={{
+                            float: "right",
+                            color: "#fff",
+                        }}
+                    >
+                        {user.userRole == "admin" ? (
+                            <Avatar style={{ backgroundColor: "#cc6600", marginRight: "5px" }} shape="square" icon={<UserOutlined />} />
+                        ) : (
+                            <Avatar style={{ backgroundColor: "#cc6600", marginRight: "5px" }} icon={<UserOutlined />} />
+                        )}
+                        <Dropdown className="dropdown"
+                            menu={{
+                                items: dropdownItems                              
+                            }}
+                            trigger={['click']}
+                        >
+                            <a onClick={(e) => e.preventDefault()}>
+                                {user.isAuthenticated ? (
+                                    <span>{user.userName}</span>
+                                ) : (
+                                    <span>Гость</span>
+                                )}
+                            </a>
+                        </Dropdown>
+                    </div>
                 <Menu
+                    style={{
+                        color: "#fff",
+                    }}
                     theme="dark"
                     mode="horizontal"
-                    defaultSelectedKeys={['3']}
-                    items={[
-                        {
-                            label: <Link to="/">Главная</Link>,
-                            key: "1",
-                        },
-                        {
-                            label: <Link to="/register">Регистрация</Link>,
-                            key: "2",
-                        },
-                        {
-                            label: <Link to="/products">Товары</Link>,
-                            key: "3",
-                        },
-                        {
-                            label: <Link to="/login">Вход</Link>,
-                            key: "4",
-                        },
-                        {
-                            label: <Link to="/logoff">Выход</Link>,
-                            key: "5",
-                        }
-                    ]}
+                    defaultSelectedKeys={['1']}
+                    items={layoutItems}
                 />
             </Header>
             <Content
@@ -56,34 +129,31 @@ const Layout = ({ user }) => {
                     padding: '0 50px',
                 }}
             >
-                <Breadcrumb
-                    style={{
-                        margin: '16px 0',
-                    }}
-                >
-                    {/*<Breadcrumb.Item>Главная</Breadcrumb.Item>*/}
-                    {/*<Breadcrumb.Item>Регистрация</Breadcrumb.Item>*/}
-                    {/*<Breadcrumb.Item>Товары</Breadcrumb.Item>*/}
-                    {/*<Breadcrumb.Item>Вход</Breadcrumb.Item>*/}
-                    {/*<Breadcrumb.Item>Выход</Breadcrumb.Item>*/}
-                </Breadcrumb>
-                <div
-                    className="site-layout-content"
-                    style={{
-                        background: colorBgContainer,
-                    }}
-                >
+                <div className="site-layout-content">
                     <Outlet />
                 </div>
-            </Content>
-            <Footer
-                style={{
-                    textAlign: 'center',
-                }}
+                </Content>
+            <Modal
+                title="Выход"
+                open={isModalOpen}
+                onOk={logoff}
+                onCancel={handleCancel}
+                footer={[
+                    <Button onClick={logoff}>
+                        Да
+                    </Button>,
+                    <Button onClick={handleCancel}>
+                        Нет
+                    </Button>
+                ]}
             >
+                <p>Вы действительно хотите выйти?</p>
+            </Modal>
+            <Footer className="footer">
                 InernetShop Neveykin ©2023
             </Footer>
-        </LayoutAntd>
+            </LayoutAntd>
+        </>
     );
 };
 export default Layout;

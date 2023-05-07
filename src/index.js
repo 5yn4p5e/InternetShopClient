@@ -21,8 +21,10 @@ const App = () => {
         const getUser = async () => {
             return await fetch("api/account/isauthenticated")
                 .then((response) => {
-                    response.status === 401 &&
+                    if (response.status === 401)
+                    {
                         setUser({ isAuthenticated: false, userName: "", userRole: "" })
+                    }
                     return response.json()
                 })
                 .then(
@@ -54,11 +56,6 @@ const App = () => {
                             <>
                                 <CategoriesList />
                                 <ManufacturersList />
-
-                                <ProductCreate
-                                    user={user}
-                                    addProduct={addProduct}
-                                />
                                 <ProductDTO
                                     products={products}
                                     setProducts={setProducts}
@@ -78,6 +75,20 @@ const App = () => {
                         path="/register"
                         element={<Register user={user} setUser={setUser} />}
                     />
+                    <Route
+                        path="/productCreate"
+                        element={
+                            <>
+                                <CategoriesList />
+                                <ManufacturersList />
+                                <ProductCreate
+                                    user={user}
+                                    addProduct={addProduct}
+                                />
+                            </>
+
+                        }
+                    />
                     <Route path="*" element={<h3>404</h3>} />
                 </Route>
             </Routes>
@@ -86,7 +97,5 @@ const App = () => {
 }
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(
-    //<React.StrictMode>
     <App />
-    //</React.StrictMode>
 )
