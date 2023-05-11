@@ -2,20 +2,25 @@ import React, { useState, useEffect } from "react"
 import ReactDOM from "react-dom/client"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 
+import CategoryList from "./Components/CategoryList/CategoryList"
+import ManufacturerList from "./Components/ManufacturerList/ManufacturerList"
+import Category from "./Components/Category/Category"
+import Manufacturer from "./Components/Manufacturer/Manufacturer"
 import ProductDTO from "./Components/Product/Product"
+import CategoryCreate from "./Components/CategoryCreate/CategoryCreate"
+import ManufacturerCreate from "./Components/ManufacturerCreate/ManufacturerCreate"
 import ProductCreate from "./Components/ProductCreate/ProductCreate"
 import Layout from "./Components/Layout/Layout"
 import Login from "./Components/Login/Login"
 import Logoff from "./Components/Logoff/Logoff"
 import Register from "./Components/Register/Register"
-import CategoriesList from "./Components/CategoryList/CategoryList"
-import ManufacturersList from "./Components/ManufacturerList/ManufacturerList"
 
 const App = () => {
-    const [products, setProducts] = useState([])
-    const addProduct = (product) => setProducts([...products, product])
-    const removeProduct = (removeId) => setProducts(products.filter(({ id }) => id
+    const [entities, setEntities] = useState([])
+    const addEntity = (entity) => setEntities([...entities, entity])
+    const removeEntity = (removeId) => setEntities(entities.filter(({ id }) => id
         !== removeId))
+
     const [user, setUser] = useState({ isAuthenticated: false, userName: "", userRole: "" })
     useEffect(() => {
         const getUser = async () => {
@@ -48,18 +53,19 @@ const App = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Layout user={user} />}>
-                    <Route index element={<h3>Main page</h3>} />
+                <Route path="/"
+                    element={<Layout user={user} setUser={setUser} />}>
+                    <Route index element={<h3 className="orangeColor">Main page</h3>} />
                     <Route
                         path="/products"
                         element={
                             <>
-                                <CategoriesList />
-                                <ManufacturersList />
+                                <CategoryList />
+                                <ManufacturerList />
                                 <ProductDTO
-                                    products={products}
-                                    setProducts={setProducts}
-                                    removeProduct={removeProduct}
+                                    products={entities}
+                                    setProducts={setEntities}
+                                    removeProduct={removeEntity}
                                     user={user}
                                 />
                             </>
@@ -79,11 +85,63 @@ const App = () => {
                         path="/productCreate"
                         element={
                             <>
-                                <CategoriesList />
-                                <ManufacturersList />
+                                <CategoryList />
+                                <ManufacturerList />
                                 <ProductCreate
+                                    addProduct={addEntity}
                                     user={user}
-                                    addProduct={addProduct}
+                                />
+                            </>
+
+                        }
+                    />
+                    <Route
+                        path="/categories"
+                        element={
+                            <>
+                                <Category
+                                    categories={entities}
+                                    setCategories={setEntities}
+                                    removeCategory={removeEntity}
+                                    user={user}
+                                />
+                            </>
+
+                        }
+                    />
+                    <Route
+                        path="/categoryCreate"
+                        element={
+                            <>
+                                <CategoryCreate
+                                    addCategory={addEntity}
+                                    user={user}
+                                />
+                            </>
+
+                        }
+                    />
+                    <Route
+                        path="/manufacturers"
+                        element={
+                            <>
+                                <Manufacturer
+                                    manufacturers={entities}
+                                    setManufacturers={setEntities}
+                                    removeManufacturer={removeEntity}
+                                    user={user}
+                                />
+                            </>
+
+                        }
+                    />
+                    <Route
+                        path="/manufacturerCreate"
+                        element={
+                            <>
+                                <ManufacturerCreate
+                                    addManufacturer={addEntity}
+                                    user={user}
                                 />
                             </>
 

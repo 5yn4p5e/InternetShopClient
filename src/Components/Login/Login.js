@@ -14,7 +14,6 @@ const Login = ({ user, setUser }) => {
         event.preventDefault()
 
         var { email, password, remember } = document.forms[0]
-        // console.log(email.value, password.value)
 
         const requestOptions = {
             method: "POST",

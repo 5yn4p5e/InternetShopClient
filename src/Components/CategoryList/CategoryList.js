@@ -1,8 +1,8 @@
-﻿import { useEffect } from "react"
-export let categoriesList = [ { } ]
+import { useEffect } from "react"
+export var categoryList = [{}]
 const CategoryList = () => {
     useEffect(() => {
-        const getCategories = async () => {
+        const getCategs = async () => {
             const requestOptions = {
                 method: "GET"
             }
@@ -14,14 +14,14 @@ const CategoryList = () => {
                 .then(
                     (data) => {
                         console.log("Data:", data)
-                        categoriesList = data
+                        categoryList = data
                     },
                     (error) => {
                         console.log(error)
                     }
                 )
         }
-        getCategories()
+        getCategs()
     })
 }
 export default CategoryList

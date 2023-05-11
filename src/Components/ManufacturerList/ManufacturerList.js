@@ -1,5 +1,5 @@
-﻿import { useEffect } from "react"
-export let manufacturersList = [{}]
+import { useEffect } from "react"
+export var manufacturerList = [{}]
 const ManufacturerList = () => {
     useEffect(() => {
         const getManufs = async () => {
@@ -14,7 +14,7 @@ const ManufacturerList = () => {
                 .then(
                     (data) => {
                         console.log("Data:", data)
-                        manufacturersList = data
+                        manufacturerList = data
                     },
                     (error) => {
                         console.log(error)

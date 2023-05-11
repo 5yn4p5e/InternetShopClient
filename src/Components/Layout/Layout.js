@@ -1,7 +1,7 @@
 ﻿import React from "react"
 import { Outlet, Link } from "react-router-dom"
 import "./Style.css"
-import { Layout as LayoutAntd, Menu, theme, Avatar, Dropdown, Button, Modal } from 'antd';
+import { Layout as LayoutAntd, Menu, Avatar, Dropdown, Button, Modal } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 
@@ -67,8 +67,24 @@ const Layout = ({ user, setUser }) => {
                 key: "2",
             },
             {
-                label: <Link to="/productCreate">Добавление товара</Link>,
+                label: <Link to="/productCreate">Создание товара</Link>,
                 key: "3",
+            },
+            {
+                label: <Link to="/categories">Категории</Link>,
+                key: "4",
+            },
+            {
+                label: <Link to="/categoryCreate">Создание категории</Link>,
+                key: "5",
+            },
+            {
+                label: <Link to="/manufacturers">Вендоры</Link>,
+                key: "6",
+            },
+            {
+                label: <Link to="/manufacturerCreate">Создание вендора</Link>,
+                key: "7",
             },
         ];
     }
@@ -132,7 +148,7 @@ const Layout = ({ user, setUser }) => {
                 <div className="site-layout-content">
                     <Outlet />
                 </div>
-                </Content>
+            </Content>
             <Modal
                 title="Выход"
                 open={isModalOpen}
