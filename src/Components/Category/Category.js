@@ -12,6 +12,15 @@ import { useState } from 'react';
 import "./Style.css";
 
 const { Meta } = Card;
+
+/**
+ * 
+ * @param {Categories} categories Список категорий
+ * @param {Categories} setCategories Метод изменения списка категорий
+ * @param {Category} removeCategory Метод удаления списка категорий
+ * @param {User} user Авторизованный на момент попадания на страницу пользователь
+ * @returns Страница /categories, заполненная категориями с возможностью редактирования для администратора
+ */
 const Category = ({ categories, setCategories, removeCategory, user }) => {
     useEffect(() => {
         const getCategories = async () => {
@@ -63,8 +72,6 @@ const Category = ({ categories, setCategories, removeCategory, user }) => {
         setIsModalApproveEditOpen(true);
     }
     const handleEditItemCancel = () => {
-        setCategId(-1);
-        setNameOfCategory("");
         setComponentEditDisabled(true);
         setIsModalApproveEditOpen(false);
     }

@@ -7,7 +7,12 @@ import {
 import { useState } from 'react';
 import "./Style.css";
 
-const ManufacturerCreate = ({ addMnaufacturer, user }) => {
+/**
+ * @param {Manufacturer} addManufacturer Метод добавления производителя для отображения в тегах <Select> на сайте
+ * @param {User} user Авторизованный на момент попадания на страницу пользователь
+ * @returns Страница /manufacturerCreate
+ */
+const ManufacturerCreate = ({ addManufacturer, user }) => {
     const [nameOfManufacturer, setNameOfManufacturer] = useState("");
     const [addressOfManufacturer, setAddressOfManufacturer] = useState("");
     const handleSubmit = () => {
@@ -27,7 +32,7 @@ const ManufacturerCreate = ({ addMnaufacturer, user }) => {
             return await response.json().then((data) => {
                 console.log(data)
                 if (response.ok) {
-                    addMnaufacturer(data)
+                    addManufacturer(data)
                 }
             },
                 (error) => console.log(error))

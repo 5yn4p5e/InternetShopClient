@@ -7,6 +7,11 @@ import {
 import { useState } from 'react';
 import "./Style.css";
 
+/**
+ * @param {Category} addCategory Метод добавления категории для отображения в тегах <Select> на сайте
+ * @param {User} user Авторизованный на момент попадания на страницу пользователь
+ * @returns Страница /categoryCreate
+ */
 const CategoryCreate = ({ addCategory, user }) => {
     const [nameOfCategory, setNameOfCategory] = useState("");
 

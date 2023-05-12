@@ -12,6 +12,14 @@ import { useState } from 'react';
 import "./Style.css";
 
 const { Meta } = Card;
+/**
+ * 
+ * @param {Manufacturers} manufacturers Список производителей
+ * @param {Manufacturers} setManufacturers Метод изменения списка производителей
+ * @param {Manufacturer} removeManufacturer Метод удаления списка производителей
+ * @param {User} user Авторизованный на момент попадания на страницу пользователь
+ * @returns Страница /manufacturers, заполненная производителями с возможностью редактирования для администратора
+ */
 const Manufacturer = ({ manufacturers, setManufacturers, removeManufacturer, user }) => {
     useEffect(() => {
         const getManufacturers = async () => {
@@ -67,9 +75,6 @@ const Manufacturer = ({ manufacturers, setManufacturers, removeManufacturer, use
         setIsModalApproveEditOpen(true);
     }
     const handleEditItemCancel = () => {
-        setManufId(-1);
-        setNameOfManufacturer("");
-        setAddressOfManufacturer("");
         setComponentEditDisabled(true);
         setIsModalApproveEditOpen(false);
     }
@@ -81,7 +86,7 @@ const Manufacturer = ({ manufacturers, setManufacturers, removeManufacturer, use
         {
             id: manufId,
             name: nameOfManufacturer,
-            address: nameOfManufacturer,
+            address: addressOfManufacturer,
         }
         const requestOptions =
         {

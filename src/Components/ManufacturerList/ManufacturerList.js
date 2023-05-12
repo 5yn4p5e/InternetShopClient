@@ -1,5 +1,9 @@
 import { useEffect } from "react"
 export var manufacturerList = [{}]
+
+/**
+ * Заполняет manufacturerList для тегов <Select>
+ */
 const ManufacturerList = () => {
     useEffect(() => {
         const getManufs = async () => {

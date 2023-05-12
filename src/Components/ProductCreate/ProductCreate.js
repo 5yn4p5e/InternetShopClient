@@ -11,6 +11,11 @@ import {
 import "./Style.css";
 import { useState } from 'react';
 
+/**
+ * @param {addProduct} Метод добавления товара для отображения на сайте
+ * @param {user} Авторизованный на момент попадания на страницу пользователь
+ * @returns Страница /productCreate
+ */
 const ProductCreate = ({ addProduct, user }) => {
     const [nameOfProduct, setNameOfProduct] = useState("");
     const [categoryId, setCategoryId] = useState(-1);

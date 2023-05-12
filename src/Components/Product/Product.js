@@ -16,6 +16,13 @@ import {  Card, List } from 'antd';
 import "./Style.css";
 import { useState } from 'react';
 const { Meta } = Card;
+/** 
+ * @param {Products} products Список DTO товаров
+ * @param {Products} setProducts Метод изменения списка DTO товаров
+ * @param {Product} removeProducts Метод удаления списка DTO товаров
+ * @param {User} user Авторизованный на момент попадания на страницу пользователь
+ * @returns Страница /products, заполненная товарами с возможностью редактирования для администратора
+ */
 const ProductDTO = ({ products, setProducts, removeProduct, user }) => {
     useEffect(() => {
         const getProducts = async () => {
@@ -87,7 +94,7 @@ const ProductDTO = ({ products, setProducts, removeProduct, user }) => {
                             ]
                         )}
                     >
-                        <Meta className="meta" title={baseEntity.manufacturerName} />
+                        <Meta className="meta" title={baseEntity.name} />
                         <Meta className="meta" title={baseEntity.price} />
                     </Card>
                 </List.Item>
@@ -106,13 +113,15 @@ const ProductDTO = ({ products, setProducts, removeProduct, user }) => {
         manufacturerList.map(({ id, name }) => {
             let productsOnTabs = [];
             productsOnTabs = baseEntities.filter((baseEntity) => baseEntity.manufacturerId == id)
-            initialTabItems.push(
-                {
-                    key: id,
-                    label: name,
-                    children: getCustomList(productsOnTabs),
-                }
-            )
+            if (productsOnTabs != 0) {
+                initialTabItems.push(
+                    {
+                        key: id,
+                        label: name,
+                        children: getCustomList(productsOnTabs),
+                    }
+                )
+            }
         });
         return (
             {
@@ -128,7 +137,9 @@ const ProductDTO = ({ products, setProducts, removeProduct, user }) => {
     categoryList.map(({ id, name }) => {
         let productsOnTabs = [];
         productsOnTabs = products.filter((product) => product.categoryId == id)
-        externalTabItems.push(getTabs(id, name, productsOnTabs));
+        if (productsOnTabs != 0) {
+            externalTabItems.push(getTabs(id, name, productsOnTabs));
+        }
     });
 
     const [prId, setPrId] = useState(-1);
@@ -174,14 +185,6 @@ const ProductDTO = ({ products, setProducts, removeProduct, user }) => {
         setIsModalApproveEditOpen(true);
     }
     const handleEditItemCancel = () => {
-        setPrId(-1);
-        setNameOfProduct("");
-        setCategoryId(-1);
-        setCategoryName("");
-        setManufId(-1);
-        setManufName("");
-        setPrice(-1);
-        setLinkOfImage("");
         setComponentEditDisabled(true);
         setIsModalApproveEditOpen(false);
     }
@@ -295,10 +298,10 @@ const ProductDTO = ({ products, setProducts, removeProduct, user }) => {
                             <span>Имя товара: {nameOfProduct}</span>
                         </Form.Item>
                         <Form.Item disabled="true">
-                            <span>Категория: {categoryName}</span>
+                            <span>Производитель: {manufName}</span>
                         </Form.Item>
                         <Form.Item disabled="true">
-                            <span>Производитель: {manufName}</span>
+                            <span>Категория: {categoryName}</span>
                         </Form.Item>
                         <Form.Item disabled="true">
                             <span>Цена: {price} руб.</span>

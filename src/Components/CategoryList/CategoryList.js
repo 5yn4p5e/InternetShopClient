@@ -1,5 +1,9 @@
 import { useEffect } from "react"
 export var categoryList = [{}]
+
+/**
+ * Заполняет categoryList для тегов <Select>
+ */
 const CategoryList = () => {
     useEffect(() => {
         const getCategs = async () => {

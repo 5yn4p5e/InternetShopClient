@@ -6,6 +6,12 @@ import { UserOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 
 const { Header, Content, Footer } = LayoutAntd;
+/**
+ * 
+ * @param {User} user Авторизованный на момент попадания на страницу пользователь
+ * @param {User} setUser Метод для изменения пользователя на странице
+ * @returns Макет страницы сайта
+ */
 const Layout = ({ user, setUser }) => {
     let dropdownItems;
     let layoutItems;
